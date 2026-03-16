@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cormorant+Infant:ital,wght@0,300;0,400;1,300;1,400&family=Pinyon+Script&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --bg:          #F4EFE4;
+      --paper:       #FAF7F1;
+      --paper-dark:  #F0EAD9;
+      --white:       #FFFDF8;
+      --ink:         #28201A;
+      --ink-mid:     #5A4438;
+      --ink-faint:   #9E8878;
+      --gold:        #B8895A;
+      --gold-light:  #DFC9A4;
+      --rule:        rgba(184, 137, 90, 0.09);
+      --seam:        #DDD3C2;
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--ink);
+    }
+
+    /* Grain overlay for aged-paper feel */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      opacity: 0.55;
+    }
+
+    /* ─── Page shell ─────────────────────────────────────────── */
+    .page {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ─── DAD SECTION (left 50%) ─────────────────────────────── */
+    .dad-section {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      border-right: 1px solid var(--seam);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Top gold rule */
+    .dad-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+      opacity: 0.55;
+      z-index: 10;
+    }
+
+    /* ─── Photos column ──────────────────────────────────────── */
+    .photos-col {
+      width: 38%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 38px 18px 38px 30px;
+      background: var(--bg);
+      border-right: 1px solid var(--seam);
+      position: relative;
+      animation: riseIn 0.9s ease both;
+    }
+
+    .photo-slot {
+      flex: 1;
+      position: relative;
+      min-height: 0;
+    }
+
+    .photo-slot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Polaroid-style frame wrapper */
+    .photo-mat {
+      position: absolute;
+      inset: 0;
+      background: var(--white);
+      padding: 7px 7px 18px 7px;
+      box-shadow:
+        1px 2px 6px rgba(0,0,0,0.13),
+        0 1px 2px rgba(0,0,0,0.07);
+    }
+
+    .photo-mat img {
+      position: relative;
+      width: 100%;
+      height: calc(100% - 11px);
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Placeholder when no image */
+    .photo-placeholder {
+      position: absolute;
+      inset: 7px 7px 18px;
+      background: var(--paper-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .photo-placeholder svg {
+      opacity: 0.22;
+    }
+
+    .photo-placeholder .ph-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 10.5px;
+      letter-spacing: 0.06em;
+      color: var(--ink-faint);
+      opacity: 0.75;
+    }
+
+    /* Slight tilt variation for liveliness */
+    .photo-slot:nth-child(1) .photo-mat { transform: rotate(-0.6deg); }
+    .photo-slot:nth-child(2) .photo-mat { transform: rotate(0.4deg); }
+    .photo-slot:nth-child(3) .photo-mat { transform: rotate(-0.3deg); }
+
+    .photo-slot .photo-mat {
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .photo-slot:hover .photo-mat {
+      transform: rotate(0deg) scale(1.015) !important;
+      box-shadow:
+        3px 6px 18px rgba(0,0,0,0.18),
+        0 2px 4px rgba(0,0,0,0.09);
+      z-index: 5;
+    }
+
+    /* ─── Letter column ──────────────────────────────────────── */
+    .letter-col {
+      width: 62%;
+      height: 100%;
+      background: var(--paper);
+      padding: 52px 38px 44px 36px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      animation: riseIn 0.9s ease 0.12s both;
+    }
+
+    /* Ruled lines — like lined letter paper */
+    .letter-col::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 33px,
+        var(--rule) 33px,
+        var(--rule) 34px
+      );
+      pointer-events: none;
+    }
+
+    /* Left margin line */
+    .letter-col::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 58px;
+      width: 1px;
+      background: rgba(184, 137, 90, 0.13);
+      pointer-events: none;
+    }
+
+    /* Decorative postage stamp */
+    .stamp {
+      position: absolute;
+      top: 38px;
+      right: 34px;
+      width: 50px;
+      height: 62px;
+      border: 1.5px solid var(--gold-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      opacity: 0.65;
+      background: var(--white);
+    }
+    /* Perforated edge */
+    .stamp::before {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border: 1.5px dotted var(--gold-light);
+    }
+    .stamp-year {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stamp-text {
+      font-size: 7px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* Letter content */
+    .letter-inner {
+      padding-left: 28px; /* clear margin line */
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .letter-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--ink-faint);
+      letter-spacing: 0.07em;
+      margin-bottom: 30px;
+    }
+
+    .letter-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 10.5px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 7px;
+    }
+
+    .letter-salutation {
+      font-family: 'Cormorant Infant', serif;
+      font-style: italic;
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .ornament {
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: var(--gold-light);
+      margin: 14px 0 22px;
+    }
+
+    .letter-body p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16.5px;
+      line-height: 1.88;
+      color: var(--ink-mid);
+      margin-bottom: 18px;
+    }
+
+    /* Drop cap */
+    .letter-body p:first-child::first-letter {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 54px;
+      font-weight: 700;
+      line-height: 0.82;
+      float: left;
+      margin-right: 5px;
+      margin-top: 5px;
+      color: var(--gold);
+    }
+
+    .letter-closing {
+      margin-top: auto;
+      padding-top: 22px;
+    }
+
+    .letter-closing-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--ink-mid);
+      margin-bottom: 14px;
+    }
+
+    .letter-signature {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 44px;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    /* Scrollbar */
+    .letter-col::-webkit-scrollbar { width: 3px; }
+    .letter-col::-webkit-scrollbar-track { background: transparent; }
+    .letter-col::-webkit-scrollbar-thumb { background: var(--gold-light); border-radius: 2px; }
+
+    /* ─── MOM SECTION (right 50%, placeholder) ───────────────── */
+    .mom-section {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      animation: riseIn 0.9s ease 0.25s both;
+    }
+
+    /* Faint decorative radial glow */
+    .mom-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(184,137,90,0.05) 0%, transparent 70%);
+    }
+
+    /* Corner filigree marks */
+    .mom-section::after {
+      content: '';
+      position: absolute;
+      inset: 40px;
+      border: 1px solid rgba(184,137,90,0.12);
+      pointer-events: none;
+    }
+
+    .mom-inner {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mom-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 1px solid var(--seam);
+      margin: 0 auto 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .mom-circle::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 1px dashed var(--gold-light);
+    }
+    .mom-glyph {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      color: var(--gold-light);
+      line-height: 1;
+      font-style: italic;
+    }
+
+    .mom-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 10px;
+    }
+
+    .mom-sub {
+      font-family: 'Cormorant Infant', serif;
+      font-style: italic;
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--gold-light);
+    }
+
+    /* ─── Animations ─────────────────────────────────────────── */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ████ DAD ████ -->
+  <section class="dad-section">
+
+    <!-- Photos -->
+    <div class="photos-col">
+      <div class="photo-slot">
+        <div class="photo-mat">
+          <img id="pic1" src="source/picture_1.png" alt="Photo 1" />
+          <div class="photo-placeholder" id="ph1" style="display:none;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#5A4438" stroke-width="1.4">
+              <rect x="2" y="6" width="20" height="15" rx="2"/>
+              <circle cx="12" cy="13.5" r="3.5"/>
+              <path d="M7.5 6 9 4h6l1.5 2"/>
+            </svg>
+            <span class="ph-label">picture_1.png</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-slot">
+        <div class="photo-mat">
+          <img id="pic2" src="source/picture_2.png" alt="Photo 2" />
+          <div class="photo-placeholder" id="ph2" style="display:none;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#5A4438" stroke-width="1.4">
+              <rect x="2" y="6" width="20" height="15" rx="2"/>
+              <circle cx="12" cy="13.5" r="3.5"/>
+              <path d="M7.5 6 9 4h6l1.5 2"/>
+            </svg>
+            <span class="ph-label">picture_2.png</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-slot">
+        <div class="photo-mat">
+          <img id="pic3" src="source/picture_3.png" alt="Photo 3" />
+          <div class="photo-placeholder" id="ph3" style="display:none;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#5A4438" stroke-width="1.4">
+              <rect x="2" y="6" width="20" height="15" rx="2"/>
+              <circle cx="12" cy="13.5" r="3.5"/>
+              <path d="M7.5 6 9 4h6l1.5 2"/>
+            </svg>
+            <span class="ph-label">picture_3.png</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Letter -->
+    <div class="letter-col">
+
+      <div class="stamp">
+        <div class="stamp-year">2026</div>
+        <div class="stamp-text">Birthday</div>
+      </div>
+
+      <div class="letter-inner">
+        <div class="letter-date">March 16, 2026</div>
+
+        <div class="letter-eyebrow">A letter for</div>
+        <div class="letter-salutation">Dear Papa,,</div>
+        <span class="ornament"></span>
+
+        <div class="letter-body">
+          <p>
+            Happy Birthday Papa! Although this website was TOTALLY not written by claude code, I can ensure 
+            that every word is written by me. I can't believe my old man is 48 years young today. It's the ripe age
+            to start working out with me...
+          </p>
+          <p>
+            You have been there for the family consistently and there are no amount of thank yous that are enough.
+            Although you said that the 48th birthday will make me the new man, I think that we can do it together.
+            We are proud, independent, and strong women papa. 
+          </p>
+          <p>
+            I look forward to the early morning workouts and runs which we will totally do more than once, and once we grow up we will go on a drunk sailing trip with Irish folk songs.
+            I hope 48 brings great memories and laughter.
+          </p>
+          <p>
+            Have a great day, week, month and year ahead.
+            I love you papa happy birthday!
+          </p>
+        </div>
+
+        <div class="letter-closing">
+          <div class="letter-closing-line">With all my love, always —</div>
+          <div class="letter-signature">Your child</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ████ MOM (coming soon) ████ -->
+  <section class="mom-section">
+    <div class="mom-inner">
+      <div class="mom-circle">
+        <div class="mom-glyph">♡</div>
+      </div>
+      <div class="mom-label">Coming Soon</div>
+      <div class="mom-sub">A letter for Mom</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Show placeholders for images that fail to load
+  [1, 2, 3].forEach(n => {
+    const img = document.getElementById('pic' + n);
+    const ph  = document.getElementById('ph'  + n);
+
+    const hide = () => {
+      img.style.display = 'none';
+      ph.style.display  = 'flex';
+    };
+
+    img.addEventListener('error', hide);
+
+    // Already failed (cached)
+    if (img.complete && img.naturalWidth === 0) hide();
+  });
+</script>
+</body>
+</html>
